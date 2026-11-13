@@ -7,7 +7,7 @@ A working mode for coding agents: the main agent acts as an **orchestrator** and
 Two pieces of text make up the mode:
 
 - **Orchestration rules**, read by the main agent in every session. They tell it to plan and decompose the work itself, dispatch substantial tasks to the `implementer` subagent with a complete brief, review what comes back, and keep every decision (scope, git, architecture, trade-offs) for itself. Small tasks stay inline.
-- **The `implementer` definition**, read by the subagent. It tells the worker to stay inside the brief, verify before reporting, never commit unless told to, and return a fixed-format report: outcome, done, verification, issues, follow-ups.
+- **The `implementer` definition**, read by the subagent. It tells the worker to stay inside the brief, find missing facts itself but leave decisions to the orchestrator, verify before reporting, never commit unless told to, and return a fixed-format report: outcome, result, verification, issues, follow-ups.
 
 The subagent's work happens in its own context, so the main agent's context receives only the report. A subagent starts with no knowledge of the conversation, which is why the rules insist on complete briefs.
 
@@ -25,7 +25,7 @@ The two harnesses read the same content in different formats, so each has its ow
 | Installed as | `~/.claude/agents/implementer.md` | `~/.codex/agents/implementer.toml` |
 | Model settings | `model`, `effort` | `model`, `model_reasoning_effort` |
 
-The Codex text differs from the Claude Code text in two places: it refers to `AGENTS.md` where the other refers to `CLAUDE.md`, and it does not name Claude Code's `SendMessage` tool. When you change one copy, change the other.
+The Codex text differs from the Claude Code text in two places, in the last two paragraphs of the orchestration rules: it refers to `AGENTS.md` where the other refers to `CLAUDE.md`, and it does not name Claude Code's `SendMessage` tool. When you change one copy, change the other.
 
 On Windows, `~` is your user profile folder: `C:\Users\<you>`, or `$HOME` in PowerShell. Both tools use the same folder names there (`.claude`, `.codex`). If you run a tool inside WSL, follow the Linux steps inside WSL.
 
@@ -107,7 +107,7 @@ In Codex, subagents depend on the `multi_agent` feature, which is on by default.
 
 ## Adjust
 
-- **Model and effort.** The Claude Code definition sets `model: opus` and `effort: high`. The Codex definition sets `model_reasoning_effort = "high"` and inherits the model from the parent session; uncomment `model` to pin one.
+- **Model and effort.** Both definitions set high reasoning effort (`effort: high` in Claude Code, `model_reasoning_effort = "high"` in Codex) and inherit the model from the parent session. The `model` line is commented out in each; uncomment it to pin one.
 - **Permissions in Codex.** The agent file sets `sandbox_mode = "workspace-write"`. The current Codex documentation says a subagent runs with the sandbox and approval settings of the parent session and that an agent file cannot override them, so choose them on the parent session before delegating.
 - **How much gets dispatched.** The second paragraph of the orchestration rules decides which tasks are worth a dispatch. Edit it if the main agent delegates too much or too little.
 
